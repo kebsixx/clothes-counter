@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@import "@fontsource/orbitron";
+@import "@fontsource/inter";
+
+:root {
+  --colors-page-bg: #121212;
+  --colors-card-bg: #1e1e1e;
+  --colors-card-line: #333333;
+  --colors-number: #e0e0e0;
+  --colors-number-alert: #ff3333;
+  --colors-label: #888888;
+  --colors-gear: #e0e0e0;
+  --colors-input-bg: #2a2a2a;
+  --colors-hover-bg: #2e2e2e;
+  --colors-danger-bg: rgba(255, 51, 51, 0.08);
+  --colors-danger-line: rgba(255, 51, 51, 0.3);
+  --colors-danger-bg-hover: rgba(255, 51, 51, 0.15);
+}
+
+.app.light {
+  --colors-page-bg: #f5f5f5;
+  --colors-card-bg: #ffffff;
+  --colors-card-line: #d1d1d1;
+  --colors-number: #232323;
+  --colors-number-alert: #cc0000;
+  --colors-label: #6b6b6b;
+  --colors-gear: #333333;
+  --colors-input-bg: #f0f0f0;
+  --colors-hover-bg: #e6e6e6;
+  --colors-danger-bg: rgba(204, 0, 0, 0.05);
+  --colors-danger-line: rgba(204, 0, 0, 0.25);
+  --colors-danger-bg-hover: rgba(204, 0, 0, 0.1);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--colors-page-bg);
+  color: var(--colors-number);
+  font-family: 'Inter', sans-serif;
+  height: 100%;
+}
