@@ -1,13 +1,16 @@
 <script>
-  import { Settings, X, Moon, Sun, Minus, Plus, Trash2, TriangleAlert } from 'lucide-svelte';
+  import { Settings, HelpCircle, X, Moon, Sun, Minus, Plus, Trash2, TriangleAlert } from 'lucide-svelte';
   import { fade, scale } from 'svelte/transition';
   import Counter from './lib/Counter.svelte';
-  import { counterBaju, counterCelana, maxBaju, maxCelana, themeMode } from './stores/clothingStore.js';
+  import { counterBaju, counterCelana, maxBaju, maxCelana, labelBaju, labelCelana, themeMode } from './stores/clothingStore.js';
+  import { language, t } from './stores/i18n.js';
 
   $: themeClass = $themeMode === 'dark' ? 'dark' : 'light';
   $: isDark = $themeMode === 'dark';
+  $: if (typeof document !== 'undefined') document.documentElement.lang = $language === 'en' ? 'en' : 'id';
 
   let showSettings = false;
+  let showHelp = false;
   let confirmResetOpen = false;
 
   function toggleTheme(mode) {
@@ -33,8 +36,16 @@
     requestAnimationFrame(() => document.querySelector('.gear')?.focus());
   }
 
+  function closeHelp() {
+    showHelp = false;
+    requestAnimationFrame(() => document.querySelector('.help-btn')?.focus());
+  }
+
   function onKeydown(e) {
-    if (e.key === 'Escape' && showSettings) closeSettings();
+    if (e.key === 'Escape') {
+      if (showHelp) closeHelp();
+      else if (showSettings) closeSettings();
+    }
   }
 
   function focusPanel(node) {
@@ -47,17 +58,67 @@
 
 <div class={['app', themeClass]}>
   <header class="header">
-    <button class="gear" on:click={() => (showSettings = true)} aria-label="Pengaturan" aria-haspopup="dialog">
-      <Settings />
-    </button>
+    <div class="header-actions">
+      <button
+        class="help-btn"
+        on:click={() => (showHelp = true)}
+        aria-label={$t('helpBtnAria')}
+        aria-haspopup="dialog"
+      >
+        <HelpCircle />
+      </button>
+      <button class="gear" on:click={() => (showSettings = true)} aria-label={$t('gearAria')} aria-haspopup="dialog">
+        <Settings />
+      </button>
+    </div>
   </header>
 
   <main class="main">
     <div class="grid">
-      <Counter label="Baju" counter={counterBaju} max={maxBaju} />
-      <Counter label="Celana" counter={counterCelana} max={maxCelana} />
+      <Counter labelStore={labelBaju} fallback="Shirt" counter={counterBaju} max={maxBaju} />
+      <Counter labelStore={labelCelana} fallback="Pants" counter={counterCelana} max={maxCelana} />
     </div>
   </main>
+
+  {#if showHelp}
+  <div class="settings-backdrop" transition:fade={{ duration: 150 }} on:click={closeHelp}>
+    <div
+      class="settings-panel"
+      transition:scale={{ duration: 180, start: 0.92 }}
+      on:click|stopPropagation
+      role="dialog"
+      aria-modal="true"
+      aria-label={$t('helpDialogAria')}
+      tabindex="-1"
+      use:focusPanel
+    >
+      <header class="settings-head">
+        <div class="head-left">
+          <span class="head-icon"><HelpCircle size={18} /></span>
+          <div class="head-text">
+            <h2 class="settings-title">{$t('helpTitle')}</h2>
+            <p class="settings-sub">{$t('helpSub')}</p>
+          </div>
+        </div>
+        <button class="close-btn" on:click={closeHelp} aria-label={$t('closeHelp')}>
+          <X size={18} />
+        </button>
+      </header>
+
+      <ol class="help-list">
+        {#each $t('helpSteps') as step, i}
+          <li class="help-item">
+            <span class="help-num" aria-hidden="true">{i + 1}</span>
+            <div class="help-body">
+              <p class="help-title">{step.title}</p>
+              <p class="help-desc">{@html step.desc}</p>
+            </div>
+          </li>
+        {/each}
+      </ol>
+    </div>
+  </div>
+  {/if}
 
   {#if showSettings}
   <div class="settings-backdrop" transition:fade={{ duration: 150 }} on:click={closeSettings}>
@@ -67,7 +128,7 @@
       on:click|stopPropagation
       role="dialog"
       aria-modal="true"
-      aria-label="Pengaturan"
+      aria-label={$t('settingsAria')}
       tabindex="-1"
       use:focusPanel
     >
@@ -75,39 +136,39 @@
         <div class="head-left">
           <span class="head-icon"><Settings size={18} /></span>
           <div class="head-text">
-            <h2 class="settings-title">Pengaturan</h2>
-            <p class="settings-sub">Batas maksimum & preferensi</p>
+            <h2 class="settings-title">{$t('settingsTitle')}</h2>
+            <p class="settings-sub">{$t('settingsSub')}</p>
           </div>
         </div>
-        <button class="close-btn" on:click={closeSettings} aria-label="Tutup pengaturan">
+        <button class="close-btn" on:click={closeSettings} aria-label={$t('closeSettings')}>
           <X size={18} />
         </button>
       </header>
 
       <div class="setting-section">
-        <p class="section-title">Batas Maksimum</p>
+        <p class="section-title">{$t('maxLimits')}</p>
 
         <div class="setting-row">
-          <span class="setting-label">Baju</span>
+          <span class="setting-label">{$labelBaju}</span>
           <div class="stepper">
-            <button class="step-btn" on:click={() => adjustMax(maxBaju, -1)} aria-label="Kurangi batas baju">
+            <button class="step-btn" on:click={() => adjustMax(maxBaju, -1)} aria-label={$t('decreaseLimit', { label: $labelBaju })}>
               <Minus size={14} />
             </button>
             <span class="step-value">{$maxBaju}</span>
-            <button class="step-btn" on:click={() => adjustMax(maxBaju, 1)} aria-label="Tambah batas baju">
+            <button class="step-btn" on:click={() => adjustMax(maxBaju, 1)} aria-label={$t('increaseLimit', { label: $labelBaju })}>
               <Plus size={14} />
             </button>
           </div>
         </div>
 
         <div class="setting-row">
-          <span class="setting-label">Celana</span>
+          <span class="setting-label">{$labelCelana}</span>
           <div class="stepper">
-            <button class="step-btn" on:click={() => adjustMax(maxCelana, -1)} aria-label="Kurangi batas celana">
+            <button class="step-btn" on:click={() => adjustMax(maxCelana, -1)} aria-label={$t('decreaseLimit', { label: $labelCelana })}>
               <Minus size={14} />
             </button>
             <span class="step-value">{$maxCelana}</span>
-            <button class="step-btn" on:click={() => adjustMax(maxCelana, 1)} aria-label="Tambah batas celana">
+            <button class="step-btn" on:click={() => adjustMax(maxCelana, 1)} aria-label={$t('increaseLimit', { label: $labelCelana })}>
               <Plus size={14} />
             </button>
           </div>
@@ -115,15 +176,15 @@
       </div>
 
       <div class="setting-section">
-        <p class="section-title">Tema Warna</p>
-        <div class="segmented" role="radiogroup" aria-label="Pilih tema warna">
+        <p class="section-title">{$t('themeTitle')}</p>
+        <div class="segmented" role="radiogroup" aria-label={$t('themeAria')}>
           <button
             class:active={isDark}
             role="radio"
             aria-checked={isDark}
             on:click={() => toggleTheme('dark')}
           >
-            <Moon size={14} /> Gelap
+            <Moon size={14} /> {$t('dark')}
           </button>
           <button
             class:active={!isDark}
@@ -131,7 +192,29 @@
             aria-checked={!isDark}
             on:click={() => toggleTheme('light')}
           >
-            <Sun size={14} /> Terang
+            <Sun size={14} /> {$t('light')}
+          </button>
+        </div>
+      </div>
+
+      <div class="setting-section">
+        <p class="section-title">{$t('languageTitle')}</p>
+        <div class="segmented" role="radiogroup" aria-label={$t('languageAria')}>
+          <button
+            class:active={$language === 'id'}
+            role="radio"
+            aria-checked={$language === 'id'}
+            on:click={() => language.set('id')}
+          >
+            Indonesia
+          </button>
+          <button
+            class:active={$language === 'en'}
+            role="radio"
+            aria-checked={$language === 'en'}
+            on:click={() => language.set('en')}
+          >
+            English
           </button>
         </div>
       </div>
@@ -141,17 +224,17 @@
           <div class="danger-confirm" transition:fade={{ duration: 120 }}>
             <div class="danger-confirm-text">
               <TriangleAlert size={16} />
-              <span>Reset semua counter ke 0?</span>
+              <span>{$t('resetAllConfirm')}</span>
             </div>
             <div class="danger-actions">
-              <button class="danger-cancel" on:click={() => (confirmResetOpen = false)}>Batal</button>
-              <button class="danger-confirm-btn" on:click={resetAll}>Ya, Reset</button>
+              <button class="danger-cancel" on:click={() => (confirmResetOpen = false)}>{$t('cancel')}</button>
+              <button class="danger-confirm-btn" on:click={resetAll}>{$t('yesReset')}</button>
             </div>
           </div>
         {:else}
           <button class="danger-btn" transition:fade={{ duration: 120 }} on:click={() => (confirmResetOpen = true)}>
             <Trash2 size={15} />
-            Reset Semua Counter
+            {$t('resetAll')}
           </button>
         {/if}
       </section>
@@ -174,7 +257,13 @@
     padding: 16px 20px;
   }
 
-  .gear {
+  .header-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .gear,
+  .help-btn {
     background: var(--colors-card-bg);
     border: 1px solid var(--colors-card-line);
     border-radius: 12px;
@@ -191,9 +280,75 @@
       background 0.15s ease;
   }
 
+  .gear:hover,
+  .help-btn:hover {
+    background: var(--colors-hover-bg);
+  }
+
   .gear:hover {
     transform: rotate(45deg);
-    background: var(--colors-hover-bg);
+  }
+
+  .help-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .help-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .help-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--colors-card-line);
+    border-radius: 12px;
+    background: var(--colors-input-bg);
+  }
+
+  .help-num {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--colors-number);
+    background: var(--colors-card-bg);
+    border: 1px solid var(--colors-card-line);
+  }
+
+  .help-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .help-title {
+    margin: 0;
+    font-size: 0.83rem;
+    font-weight: 700;
+    color: var(--colors-number);
+  }
+
+  .help-desc {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--colors-label);
+  }
+
+  .help-desc :global(strong) {
+    color: var(--colors-number);
   }
 
   .main {
