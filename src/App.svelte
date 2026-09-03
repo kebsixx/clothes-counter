@@ -1,8 +1,24 @@
 <script>
   import { Settings, HelpCircle, X, Moon, Sun, Minus, Plus, Trash2, TriangleAlert } from 'lucide-svelte';
   import { fade, scale } from 'svelte/transition';
+  import { useSwipe } from 'svelte-gestures';
   import Counter from './lib/Counter.svelte';
-  import { counterBaju, counterCelana, maxBaju, maxCelana, labelBaju, labelCelana, themeMode } from './stores/clothingStore.js';
+  import OutfitTabs from './lib/OutfitTabs.svelte';
+  import {
+    outfits,
+    activeOutfitId,
+    activeOutfit,
+    themeMode,
+    setActiveOutfit,
+    addOutfit,
+    removeOutfit,
+    renameOutfit,
+    incrementCounter,
+    setCounter,
+    adjustMax,
+    setLabel,
+    resetAll,
+  } from './stores/clothingStore.js';
   import { language, t } from './stores/i18n.js';
 
   $: themeClass = $themeMode === 'dark' ? 'dark' : 'light';
@@ -13,20 +29,20 @@
   let showHelp = false;
   let confirmResetOpen = false;
 
+  // Counter: fade tebal tunggal (in = out, crossfade lebih terasa).
+  // Tab: slide via pill indicator di OutfitTabs.
+  $: reduceMotion =
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  $: gridFade = { duration: reduceMotion ? 0 : 300 };
+
   function toggleTheme(mode) {
     themeMode.set(mode);
   }
 
-  function adjustMax(store, delta) {
-    store.update((n) => {
-      const val = Number(n) || 1;
-      return Math.min(99, Math.max(1, val + delta));
-    });
-  }
-
-  function resetAll() {
-    counterBaju.set(0);
-    counterCelana.set(0);
+  function handleResetAll() {
+    resetAll();
     confirmResetOpen = false;
   }
 
@@ -52,32 +68,86 @@
     node.focus();
     return {};
   }
+
+  // Swipe kanan-kiri di mobile untuk ganti tab via svelte-gestures.
+  // touchAction 'pan-y' menjaga scroll vertikal tetap native.
+  function onSwipeMain(event) {
+    if (event.detail.pointerType !== 'touch') return;
+    const dir = event.detail.direction;
+    if (dir !== 'left' && dir !== 'right') return;
+    const idx = $outfits.findIndex((o) => o.id === $activeOutfitId);
+    if (idx === -1) return;
+    const next = dir === 'left' ? idx + 1 : idx - 1;
+    if (next < 0 || next >= $outfits.length) return;
+    setActiveOutfit($outfits[next].id);
+  }
 </script>
 
 <svelte:window on:keydown={onKeydown} />
 
 <div class={['app', themeClass]}>
+  <OutfitTabs
+    outfits={$outfits}
+    activeId={$activeOutfitId}
+    onSelect={setActiveOutfit}
+    onAdd={addOutfit}
+    onDelete={removeOutfit}
+    onRename={renameOutfit}
+  />
+
   <header class="header">
     <div class="header-actions">
       <button
         class="help-btn"
+        type="button"
         on:click={() => (showHelp = true)}
         aria-label={$t('helpBtnAria')}
         aria-haspopup="dialog"
       >
         <HelpCircle />
       </button>
-      <button class="gear" on:click={() => (showSettings = true)} aria-label={$t('gearAria')} aria-haspopup="dialog">
+      <button
+        class="gear"
+        type="button"
+        on:click={() => (showSettings = true)}
+        aria-label={$t('gearAria')}
+        aria-haspopup="dialog"
+      >
         <Settings />
       </button>
     </div>
   </header>
 
-  <main class="main">
-    <div class="grid">
-      <Counter labelStore={labelBaju} fallback="Shirt" counter={counterBaju} max={maxBaju} />
-      <Counter labelStore={labelCelana} fallback="Pants" counter={counterCelana} max={maxCelana} />
-    </div>
+  <main
+    class="main"
+    {...useSwipe(onSwipeMain, () => ({ timeframe: 300, minSwipeDistance: 60, touchAction: 'pan-y' }))}
+  >
+      {#if $activeOutfit}
+        {#key $activeOutfitId}
+          <div class="grid-viewport">
+          <div class="grid" transition:fade={gridFade}>
+            <Counter
+              label={$activeOutfit.counters.baju.label}
+              fallback="Shirt"
+              count={$activeOutfit.counters.baju.count}
+              max={$activeOutfit.counters.baju.max}
+              onIncrement={() => incrementCounter('baju')}
+              onReset={() => setCounter('baju', 0)}
+              onRename={(name) => setLabel('baju', name)}
+            />
+            <Counter
+              label={$activeOutfit.counters.celana.label}
+              fallback="Pants"
+              count={$activeOutfit.counters.celana.count}
+              max={$activeOutfit.counters.celana.max}
+              onIncrement={() => incrementCounter('celana')}
+              onReset={() => setCounter('celana', 0)}
+              onRename={(name) => setLabel('celana', name)}
+            />
+          </div>
+          </div>
+        {/key}
+      {/if}
   </main>
 
   {#if showHelp}
@@ -145,35 +215,53 @@
         </button>
       </header>
 
-      <div class="setting-section">
-        <p class="section-title">{$t('maxLimits')}</p>
+      {#if $activeOutfit}
+        <div class="setting-section">
+          <p class="section-title">{$t('maxLimits')}</p>
 
-        <div class="setting-row">
-          <span class="setting-label">{$labelBaju}</span>
-          <div class="stepper">
-            <button class="step-btn" on:click={() => adjustMax(maxBaju, -1)} aria-label={$t('decreaseLimit', { label: $labelBaju })}>
-              <Minus size={14} />
-            </button>
-            <span class="step-value">{$maxBaju}</span>
-            <button class="step-btn" on:click={() => adjustMax(maxBaju, 1)} aria-label={$t('increaseLimit', { label: $labelBaju })}>
-              <Plus size={14} />
-            </button>
+          <div class="setting-row">
+            <span class="setting-label">{$activeOutfit.counters.baju.label}</span>
+            <div class="stepper">
+              <button
+                class="step-btn"
+                on:click={() => adjustMax('baju', -1)}
+                aria-label={$t('decreaseLimit', { label: $activeOutfit.counters.baju.label })}
+              >
+                <Minus size={14} />
+              </button>
+              <span class="step-value">{$activeOutfit.counters.baju.max}</span>
+              <button
+                class="step-btn"
+                on:click={() => adjustMax('baju', 1)}
+                aria-label={$t('increaseLimit', { label: $activeOutfit.counters.baju.label })}
+              >
+                <Plus size={14} />
+              </button>
+            </div>
+          </div>
+
+          <div class="setting-row">
+            <span class="setting-label">{$activeOutfit.counters.celana.label}</span>
+            <div class="stepper">
+              <button
+                class="step-btn"
+                on:click={() => adjustMax('celana', -1)}
+                aria-label={$t('decreaseLimit', { label: $activeOutfit.counters.celana.label })}
+              >
+                <Minus size={14} />
+              </button>
+              <span class="step-value">{$activeOutfit.counters.celana.max}</span>
+              <button
+                class="step-btn"
+                on:click={() => adjustMax('celana', 1)}
+                aria-label={$t('increaseLimit', { label: $activeOutfit.counters.celana.label })}
+              >
+                <Plus size={14} />
+              </button>
+            </div>
           </div>
         </div>
-
-        <div class="setting-row">
-          <span class="setting-label">{$labelCelana}</span>
-          <div class="stepper">
-            <button class="step-btn" on:click={() => adjustMax(maxCelana, -1)} aria-label={$t('decreaseLimit', { label: $labelCelana })}>
-              <Minus size={14} />
-            </button>
-            <span class="step-value">{$maxCelana}</span>
-            <button class="step-btn" on:click={() => adjustMax(maxCelana, 1)} aria-label={$t('increaseLimit', { label: $labelCelana })}>
-              <Plus size={14} />
-            </button>
-          </div>
-        </div>
-      </div>
+      {/if}
 
       <div class="setting-section">
         <p class="section-title">{$t('themeTitle')}</p>
@@ -228,7 +316,7 @@
             </div>
             <div class="danger-actions">
               <button class="danger-cancel" on:click={() => (confirmResetOpen = false)}>{$t('cancel')}</button>
-              <button class="danger-confirm-btn" on:click={resetAll}>{$t('yesReset')}</button>
+              <button class="danger-confirm-btn" on:click={handleResetAll}>{$t('yesReset')}</button>
             </div>
           </div>
         {:else}
@@ -245,6 +333,7 @@
 
 <style>
   .app {
+    position: relative;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -356,17 +445,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px 16px;
+    padding: 24px 16px calc(104px + env(safe-area-inset-bottom));
+  }
+
+  .grid-viewport {
+    display: grid;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    overflow: clip;
   }
 
   .grid {
+    grid-area: 1 / 1;
     display: grid;
     gap: 24px;
     grid-template-columns: 1fr;
     place-items: center;
     width: 100%;
-    max-width: 640px;
-    margin: 0 auto;
+    will-change: transform, opacity;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .grid {
+      will-change: auto;
+    }
   }
 
   @media (min-width: 640px) {
@@ -670,5 +773,19 @@
 
   .danger-confirm-btn:active {
     transform: scale(0.96);
+  }
+
+  @media (min-width: 768px) {
+    .header {
+      position: absolute;
+      top: 16px;
+      right: 24px;
+      padding: 0;
+      z-index: 30;
+    }
+
+    .main {
+      padding: 32px 16px;
+    }
   }
 </style>

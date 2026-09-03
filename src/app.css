@@ -40,4 +40,8 @@ body {
   color: var(--colors-number);
   font-family: 'Inter', sans-serif;
   height: 100%;
+  /* Kunci halaman: pill tab bawah (position:fixed) tidak ikut
+     terseret saat swipe horizontal / rubber-band di mobile */
+  overflow-x: clip;
+  overscroll-behavior-x: none;
 }

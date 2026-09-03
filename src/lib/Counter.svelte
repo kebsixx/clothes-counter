@@ -5,24 +5,26 @@
   import { sanitizeLabel } from '../stores/clothingStore.js';
   import { t } from '../stores/i18n.js';
 
-  export let labelStore;
+  export let label = '';
   export let fallback = '';
-  export let counter;
-  export let max;
+  export let count = 0;
+  export let max = 1;
+  export let onIncrement = () => {};
+  export let onReset = () => {};
+  export let onRename = () => {};
 
   let pressTimer;
   let showReset = false;
   let editing = false;
   let draft = '';
 
-  $: label = $labelStore;
-  $: padded = String($counter).padStart(2, '0');
+  $: padded = String(count).padStart(2, '0');
   $: tens = Number(padded.charAt(0));
   $: units = Number(padded.charAt(1));
-  $: over = $counter >= $max;
+  $: over = count >= max;
 
   function handleClick() {
-    counter.update((n) => (n >= $max ? 0 : n + 1));
+    onIncrement();
   }
 
   function handlePressStart() {
@@ -42,7 +44,7 @@
   }
 
   function confirmReset() {
-    counter.set(0);
+    onReset();
     showReset = false;
   }
 
@@ -57,7 +59,7 @@
   }
 
   function commitEdit() {
-    labelStore.set(sanitizeLabel(draft, fallback));
+    onRename(sanitizeLabel(draft, fallback));
     editing = false;
   }
 

@@ -44,10 +44,11 @@ Buka [http://localhost:5173](http://localhost:5173) di browser.
 ```
 src/
   ├── stores/
-  │     └── clothingStore.js    # State management (counterBaju, counterCelana, maxBaju, maxCelana)
+  │     └── clothingStore.js    # State management (outfits, counters per outfit)
   ├── lib/
-  │     ├── CounterCard.svelte
-  │     └── SettingsModal.svelte
+  │     ├── Counter.svelte
+  │     ├── FlipDigit.svelte
+  │     └── OutfitTabs.svelte
   ├── app.css
   └── app.html
 docs/
