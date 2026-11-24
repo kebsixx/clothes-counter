@@ -1,0 +1,40 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  body { margin: 0; font: 13px/1.5 system-ui, sans-serif; color: #111; background: #f6f5f2; }
+  h2 { margin: 0; padding: 18px 28px 6px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .5; font-weight: 600; }
+  .row { display: flex; align-items: flex-end; gap: 30px; padding: 14px 28px 24px; }
+  .dark { background: #121212; color: #eee; }
+  .cell { text-align: center; }
+  .cell img { display: block; margin: 0 auto 6px; }
+  .label { opacity: .55; font-size: 11px; }
+</style>
+
+<h2>Light — master 512 / 192 / 128 / 64 · small 48 / 32 / 16</h2>
+<div class="row">
+  <div class="cell"><img src="png/cc-mark-512.png" width="170"><div class="label">master 512</div></div>
+  <div class="cell"><img src="png/cc-mark-192.png" width="110"><div class="label">master 192</div></div>
+  <div class="cell"><img src="png/cc-mark-128.png" width="90"><div class="label">master 128</div></div>
+  <div class="cell"><img src="png/cc-mark-64.png" width="64"><div class="label">master 64</div></div>
+  <div class="cell"><img src="png/cc-mark-small-48.png" width="48"><div class="label">small 48</div></div>
+  <div class="cell"><img src="png/cc-mark-small-32.png" width="32"><div class="label">small 32</div></div>
+  <div class="cell"><img src="png/cc-mark-small-16.png" width="16"><div class="label">small 16</div></div>
+</div>
+
+<h2>16 px pixel test — small cut vs master (master fails, hence the cut)</h2>
+<div class="row">
+  <div class="cell"><img src="png/cc-mark-small-16.png" width="16"><div class="label">small 16</div></div>
+  <div class="cell"><img src="png/cc-mark-16.png" width="16"><div class="label">master 16</div></div>
+  <div class="cell"><img src="png/cc-mark-small-24.png" width="24"><div class="label">small 24</div></div>
+  <div class="cell"><img src="png/cc-mark-64.png" width="64"><div class="label">master 64</div></div>
+  <div class="cell"><img src="png/cc-mark-small-48.png" width="48"><div class="label">small 48</div></div>
+</div>
+
+<div class="dark">
+  <h2>Dark — white 512 / white 64 / red accent 512</h2>
+  <div class="row">
+    <div class="cell"><img src="png/cc-mark-white-512.png" width="170"><div class="label">white 512</div></div>
+    <div class="cell"><img src="png/cc-mark-white-64.png" width="64"><div class="label">white 64</div></div>
+    <div class="cell"><img src="png/cc-mark-red-512.png" width="120"><div class="label">red 512</div></div>
+  </div>
+</div>

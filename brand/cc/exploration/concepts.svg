@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600" height="840" viewBox="0 0 1600 840"><rect width="1600" height="840" fill="#f7f7f4"/><text x="60" y="78" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="40" font-weight="700" fill="#161616">Logo concepts</text><text x="60" y="116" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="20" fill="#6b6b6b">Concepts for review — pick a direction (or tell me what you like in each).</text><rect x="60" y="150" width="474.667" height="630" rx="18" fill="#fff" stroke="#e4e4e0" stroke-width="1"/><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="90" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <!-- Concept A: Floating tile layers (also the cardset mood). Mono: good for instagram muted look. */ -->
+  <rect x="28" y="36" width="200" height="72" rx="10" fill="#1e1e1e"/>
+  <rect x="28" y="44" width="200" height="64" rx="8" fill="#e0e0e0"/>
+  <rect x="44" y="140" width="168" height="72" rx="10" fill="#ff3333"/>
+  <rect x="42" y="136" width="172" height="76" rx="9" fill="#141414"/>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="90" y="516" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <!-- Concept A: Floating tile layers (also the cardset mood). Mono: good for instagram muted look. */ -->
+  <rect x="28" y="36" width="200" height="72" rx="10" fill="#1e1e1e"/>
+  <rect x="28" y="44" width="200" height="64" rx="8" fill="#e0e0e0"/>
+  <rect x="44" y="140" width="168" height="72" rx="10" fill="#ff3333"/>
+  <rect x="42" y="136" width="172" height="76" rx="9" fill="#141414"/>
+</svg>
+</g><text x="122" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="180" y="548" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <!-- Concept A: Floating tile layers (also the cardset mood). Mono: good for instagram muted look. */ -->
+  <rect x="28" y="36" width="200" height="72" rx="10" fill="#1e1e1e"/>
+  <rect x="28" y="44" width="200" height="64" rx="8" fill="#e0e0e0"/>
+  <rect x="44" y="140" width="168" height="72" rx="10" fill="#ff3333"/>
+  <rect x="42" y="136" width="172" height="76" rx="9" fill="#141414"/>
+</svg>
+</g><text x="196" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="238" y="564" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <!-- Concept A: Floating tile layers (also the cardset mood). Mono: good for instagram muted look. */ -->
+  <rect x="28" y="36" width="200" height="72" rx="10" fill="#1e1e1e"/>
+  <rect x="28" y="44" width="200" height="64" rx="8" fill="#e0e0e0"/>
+  <rect x="44" y="140" width="168" height="72" rx="10" fill="#ff3333"/>
+  <rect x="42" y="136" width="172" height="76" rx="9" fill="#141414"/>
+</svg>
+</g><text x="246" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="90.0" y="636" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">A · A: Flip Tiles</text><text x="90.0" y="670" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Digital counter / dark tile offset</text><rect x="562.667" y="150" width="474.667" height="630" rx="18" fill="#fff" stroke="#161616" stroke-width="2"/><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="592.667" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <!-- Concept B: Monogram CC. Mono/one-colour mark. */ -->
+  <g fill="none" stroke="#000000" stroke-width="14">
+    <path d="M176 100 H80 C 58 100, 50 122, 50 142 c 0 20, 8, 34, 28, 34" stroke-linecap="square"/>
+    <path d="M80 156 H176 C 198 156, 206 134, 206 114 c 0 -20, -8, -34, -28, -34" stroke-linecap="square"/>
+  </g>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="592.667" y="516" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <!-- Concept B: Monogram CC. Mono/one-colour mark. */ -->
+  <g fill="none" stroke="#000000" stroke-width="14">
+    <path d="M176 100 H80 C 58 100, 50 122, 50 142 c 0 20, 8, 34, 28, 34" stroke-linecap="square"/>
+    <path d="M80 156 H176 C 198 156, 206 134, 206 114 c 0 -20, -8, -34, -28, -34" stroke-linecap="square"/>
+  </g>
+</svg>
+</g><text x="624.667" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="682.667" y="548" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <!-- Concept B: Monogram CC. Mono/one-colour mark. */ -->
+  <g fill="none" stroke="#000000" stroke-width="14">
+    <path d="M176 100 H80 C 58 100, 50 122, 50 142 c 0 20, 8, 34, 28, 34" stroke-linecap="square"/>
+    <path d="M80 156 H176 C 198 156, 206 134, 206 114 c 0 -20, -8, -34, -28, -34" stroke-linecap="square"/>
+  </g>
+</svg>
+</g><text x="698.667" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="740.667" y="564" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <!-- Concept B: Monogram CC. Mono/one-colour mark. */ -->
+  <g fill="none" stroke="#000000" stroke-width="14">
+    <path d="M176 100 H80 C 58 100, 50 122, 50 142 c 0 20, 8, 34, 28, 34" stroke-linecap="square"/>
+    <path d="M80 156 H176 C 198 156, 206 134, 206 114 c 0 -20, -8, -34, -28, -34" stroke-linecap="square"/>
+  </g>
+</svg>
+</g><text x="748.667" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="592.6666666666667" y="636" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">B · B: CC Mono</text><text x="592.6666666666667" y="664" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#161616" letter-spacing="1.5">RECOMMENDED</text><text x="592.6666666666667" y="698" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Clean single-colour CC monogram</text><rect x="1065.33" y="150" width="474.667" height="630" rx="18" fill="#fff" stroke="#e4e4e0" stroke-width="1"/><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="1095.33" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <!-- Concept C: Two overlapping digit-cells (flip form). Red accent gives the limit. */ -->
+  <rect x="48" y="36" width="168" height="56" rx="8" fill="#000000"/>
+  <rect x="56" y="44" width="160" height="48" rx="7" fill="#e0e0e0"/>
+  <rect x="64" y="128" width="152" height="48" rx="8" fill="#ff3333"/>
+  <rect x="72" y="136" width="144" height="40" rx="7" fill="#0d0d0d"/>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="1095.33" y="516" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <!-- Concept C: Two overlapping digit-cells (flip form). Red accent gives the limit. */ -->
+  <rect x="48" y="36" width="168" height="56" rx="8" fill="#000000"/>
+  <rect x="56" y="44" width="160" height="48" rx="7" fill="#e0e0e0"/>
+  <rect x="64" y="128" width="152" height="48" rx="8" fill="#ff3333"/>
+  <rect x="72" y="136" width="144" height="40" rx="7" fill="#0d0d0d"/>
+</svg>
+</g><text x="1127.33" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="1185.33" y="548" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <!-- Concept C: Two overlapping digit-cells (flip form). Red accent gives the limit. */ -->
+  <rect x="48" y="36" width="168" height="56" rx="8" fill="#000000"/>
+  <rect x="56" y="44" width="160" height="48" rx="7" fill="#e0e0e0"/>
+  <rect x="64" y="128" width="152" height="48" rx="8" fill="#ff3333"/>
+  <rect x="72" y="136" width="144" height="40" rx="7" fill="#0d0d0d"/>
+</svg>
+</g><text x="1201.33" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="1243.33" y="564" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <!-- Concept C: Two overlapping digit-cells (flip form). Red accent gives the limit. */ -->
+  <rect x="48" y="36" width="168" height="56" rx="8" fill="#000000"/>
+  <rect x="56" y="44" width="160" height="48" rx="7" fill="#e0e0e0"/>
+  <rect x="64" y="128" width="152" height="48" rx="8" fill="#ff3333"/>
+  <rect x="72" y="136" width="144" height="40" rx="7" fill="#0d0d0d"/>
+</svg>
+</g><text x="1251.33" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="1095.3333333333335" y="636" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">C · C: Digit Cells</text><text x="1095.3333333333335" y="670" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Layered cardstack w/ red limit</text></svg>

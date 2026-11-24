@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <title>Clothes Counter</title>
+  <!-- Small-size cut: thicker ring (r36), wider hinge (24). Use at 32px and below. -->
+  <path fill="#000000" d="M46.3 116 A88 88 0 0 1 209.7 84 L164.7 110 A36 36 0 0 0 99.6 116 Z"/>
+  <path fill="#000000" d="M46.3 140 A88 88 0 0 0 209.7 172 L164.7 146 A36 36 0 0 1 99.6 140 Z"/>
+</svg>

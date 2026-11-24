@@ -1,13 +1,18 @@
 @import "tailwindcss";
-@import "@fontsource/orbitron";
-@import "@fontsource/inter";
+@import "@fontsource/orbitron/400.css";
+@import "@fontsource/orbitron/700.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
 
 :root {
+  color-scheme: dark;
   --colors-page-bg: #121212;
   --colors-card-bg: #1e1e1e;
   --colors-card-line: #333333;
   --colors-number: #e0e0e0;
   --colors-number-alert: #ff3333;
+  --colors-on-alert: #0b0b0f;
   --colors-label: #888888;
   --colors-gear: #e0e0e0;
   --colors-input-bg: #2a2a2a;
@@ -17,12 +22,14 @@
   --colors-danger-bg-hover: rgba(255, 51, 51, 0.15);
 }
 
-.app.light {
+:root[data-theme='light'] {
+  color-scheme: light;
   --colors-page-bg: #f5f5f5;
   --colors-card-bg: #ffffff;
   --colors-card-line: #d1d1d1;
   --colors-number: #232323;
   --colors-number-alert: #cc0000;
+  --colors-on-alert: #ffffff;
   --colors-label: #6b6b6b;
   --colors-gear: #333333;
   --colors-input-bg: #f0f0f0;
@@ -44,4 +51,16 @@ body {
      terseret saat swipe horizontal / rubber-band di mobile */
   overflow-x: clip;
   overscroll-behavior-x: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

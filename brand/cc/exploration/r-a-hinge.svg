@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <title>Clothes Counter — concept A</title>
+  <!-- C monogram, cut by the flip hinge -->
+  <path fill="#000000" d="M192.35 74 A84 84 0 1 0 192.35 182 L157.11 152.43 A38 38 0 1 1 157.11 103.57 Z"/>
+  <rect x="16" y="124" width="224" height="8" fill="#ffffff"/>
+</svg>

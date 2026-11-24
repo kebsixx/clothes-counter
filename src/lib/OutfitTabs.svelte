@@ -4,6 +4,7 @@
   import { tick, onMount } from 'svelte';
   import { MAX_OUTFITS } from '../stores/clothingStore.js';
   import { t } from '../stores/i18n.js';
+  import { focusTrap } from './focusTrap.js';
 
   export let outfits = [];
   export let activeId = '';
@@ -13,6 +14,7 @@
   export let onRename = () => {};
 
   let pressTimer;
+  let suppressSelect = null;
   let confirmOutfit = null;
   let renamingId = null;
   let draft = '';
@@ -23,13 +25,20 @@
 
   function select(o) {
     if (renamingId === o.id) return;
+    if (suppressSelect === o.id) {
+      suppressSelect = null;
+      return;
+    }
     onSelect(o.id);
   }
 
   function startPress(o) {
     clearPress();
+    suppressSelect = null;
     if (!canDelete) return;
     pressTimer = window.setTimeout(() => {
+      // Releasing this same long-press must not also switch to the tab.
+      suppressSelect = o.id;
       confirmOutfit = o;
     }, 600);
   }
@@ -45,6 +54,13 @@
     e.preventDefault();
     if (!canDelete) return;
     confirmOutfit = o;
+  }
+
+  function onTabKeydown(e, o) {
+    if (e.key === 'Delete' && canDelete) {
+      e.preventDefault();
+      confirmOutfit = o;
+    }
   }
 
   function confirmDelete() {
@@ -120,7 +136,7 @@
   });
 </script>
 
-<div class="tabs" role="tablist" aria-label={$t('tabsAria')} bind:this={tabsEl}>
+<div class="tabs" role="group" aria-label={$t('tabsAria')} bind:this={tabsEl}>
   <div class="tab-indicator" aria-hidden="true" style={indicatorStyle}></div>
   {#each outfits as o}
     <div class="tab-wrap" class:active={o.id === activeId}>
@@ -139,11 +155,12 @@
         <button
           class="tab"
           class:active={o.id === activeId}
-          role="tab"
-          aria-selected={o.id === activeId}
+          type="button"
+          aria-pressed={o.id === activeId}
           title={$t('tabHints')}
           on:click={() => select(o)}
           on:dblclick={() => startRename(o)}
+          on:keydown={(e) => onTabKeydown(e, o)}
           on:pointerdown={() => startPress(o)}
           on:pointerup={clearPress}
           on:pointercancel={clearPress}
@@ -158,7 +175,7 @@
   {/each}
 
   {#if outfits.length < MAX_OUTFITS}
-    <button class="tab-add" on:click={onAdd} aria-label={$t('addOutfit')} title={$t('addOutfit')}>
+    <button class="tab-add" type="button" on:click={onAdd} aria-label={$t('addOutfit')} title={$t('addOutfit')}>
       <Plus size={16} />
     </button>
   {/if}
@@ -168,7 +185,7 @@
   <div
     class="tab-backdrop"
     transition:fade={{ duration: 150 }}
-    on:click={() => (confirmOutfit = null)}
+    on:click|self={() => (confirmOutfit = null)}
     on:keydown={(e) => {
       if (e.key === 'Escape') confirmOutfit = null;
     }}
@@ -179,8 +196,8 @@
       role="dialog"
       aria-modal="true"
       tabindex="-1"
+      use:focusTrap
       aria-label={$t('deleteOutfitConfirm', { name: confirmOutfit.name })}
-      on:click|stopPropagation
     >
       <span class="tab-confirm-text">{$t('deleteOutfitConfirm', { name: confirmOutfit.name })}</span>
       <div class="tab-confirm-actions">
@@ -255,7 +272,8 @@
     display: flex;
     align-items: center;
     gap: 7px;
-    padding: 6px 12px 6px 6px;
+    min-height: 40px;
+    padding: 8px 14px 8px 8px;
     border: 1px solid transparent;
     border-radius: 999px;
     background: transparent;
@@ -325,8 +343,8 @@
     position: relative;
     z-index: 1;
     flex-shrink: 0;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -429,7 +447,7 @@
   .tab-confirm-btn.danger {
     border: none;
     background: var(--colors-number-alert);
-    color: #fff;
+    color: var(--colors-on-alert);
   }
 
   .tab-confirm-btn.danger:hover {
@@ -439,7 +457,9 @@
   @media (min-width: 768px) {
     /* MacBook-style notch hanging from the top edge: black, flat top, rounded bottom */
     .tabs {
-      position: static;
+      position: relative;
+      left: auto;
+      bottom: auto;
       transform: none;
       margin: 0 auto;
       max-width: min(92vw, calc(100vw - 260px));

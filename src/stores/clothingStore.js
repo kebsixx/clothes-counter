@@ -62,12 +62,50 @@ function migrateLegacyData(outfits) {
   for (const key of LEGACY_KEYS) localStorage.removeItem(key);
 }
 
+const clampInt = (v, fallback, min, max) => {
+  const n = Number(v);
+  return Number.isFinite(n) ? Math.min(max, Math.max(min, Math.round(n))) : fallback;
+};
+
+const normalizeCounter = (raw, fallback) => {
+  const max = clampInt(raw?.max, fallback.max, 1, 99);
+  return {
+    label: sanitizeLabel(raw?.label, fallback.label),
+    max,
+    count: clampInt(raw?.count, 0, 0, max),
+  };
+};
+
+// localStorage is user-editable: never trust its shape.
+function normalizeOutfits(parsed) {
+  if (!Array.isArray(parsed)) return null;
+  const seen = new Set();
+  const list = parsed
+    .filter((o) => o && typeof o === 'object')
+    .slice(0, MAX_OUTFITS)
+    .map((o, i) => {
+      let id = typeof o.id === 'string' && o.id ? o.id : newId();
+      while (seen.has(id)) id = newId();
+      seen.add(id);
+      const base = defaultCounters();
+      return {
+        id,
+        name: sanitizeLabel(o.name, `Outfit ${LETTERS[i] ?? i + 1}`),
+        counters: {
+          baju: normalizeCounter(o.counters?.baju, base.baju),
+          celana: normalizeCounter(o.counters?.celana, base.celana),
+        },
+      };
+    });
+  return list.length ? list : null;
+}
+
 function loadOutfits() {
   try {
     const raw = localStorage.getItem(OUTFITS_KEY);
     if (raw !== null) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      const parsed = normalizeOutfits(JSON.parse(raw));
+      if (parsed) return parsed;
     }
   } catch {
     /* corrupted storage — fall through to defaults */
@@ -117,7 +155,8 @@ export function removeOutfit(id) {
     const idx = list.findIndex((o) => o.id === id);
     if (idx === -1) return list;
     const next = list.filter((o) => o.id !== id);
-    nextActive = next[Math.min(idx, next.length - 1)].id;
+    // Deleting a background outfit must not yank the user off the active one.
+    if (get(activeOutfitId) === id) nextActive = next[Math.min(idx, next.length - 1)].id;
     return next;
   });
   if (nextActive) activeOutfitId.set(nextActive);

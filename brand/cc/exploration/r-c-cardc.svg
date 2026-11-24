@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <title>Clothes Counter — concept C</title>
+  <!-- Card with the C cut out in negative space -->
+  <path fill="#000000" fill-rule="evenodd" d="M64 20 H192 A44 44 0 0 1 236 64 V192 A44 44 0 0 1 192 236 H64 A44 44 0 0 1 20 192 V64 A44 44 0 0 1 64 20 Z
+    M175.5 88.1 A62 62 0 1 0 175.5 167.9 L147.9 144.7 A26 26 0 1 1 147.9 111.3 Z"/>
+</svg>

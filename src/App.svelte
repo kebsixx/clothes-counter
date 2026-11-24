@@ -20,10 +20,15 @@
     resetAll,
   } from './stores/clothingStore.js';
   import { language, t } from './stores/i18n.js';
+  import { focusTrap } from './lib/focusTrap.js';
 
   $: themeClass = $themeMode === 'dark' ? 'dark' : 'light';
   $: isDark = $themeMode === 'dark';
-  $: if (typeof document !== 'undefined') document.documentElement.lang = $language === 'en' ? 'en' : 'id';
+  $: if (typeof document !== 'undefined') {
+    document.documentElement.lang = $language === 'en' ? 'en' : 'id';
+    // Drive the page-level tokens too, so <body> and overscroll match the theme.
+    document.documentElement.dataset.theme = themeClass;
+  }
 
   let showSettings = false;
   let showHelp = false;
@@ -49,12 +54,10 @@
   function closeSettings() {
     showSettings = false;
     confirmResetOpen = false;
-    requestAnimationFrame(() => document.querySelector('.gear')?.focus());
   }
 
   function closeHelp() {
     showHelp = false;
-    requestAnimationFrame(() => document.querySelector('.help-btn')?.focus());
   }
 
   function onKeydown(e) {
@@ -62,11 +65,6 @@
       if (showHelp) closeHelp();
       else if (showSettings) closeSettings();
     }
-  }
-
-  function focusPanel(node) {
-    node.focus();
-    return {};
   }
 
   // Swipe kanan-kiri di mobile untuk ganti tab via svelte-gestures.
@@ -151,16 +149,15 @@
   </main>
 
   {#if showHelp}
-  <div class="settings-backdrop" transition:fade={{ duration: 150 }} on:click={closeHelp}>
+  <div class="settings-backdrop" transition:fade={{ duration: 150 }} on:click|self={closeHelp}>
     <div
       class="settings-panel"
       transition:scale={{ duration: 180, start: 0.92 }}
-      on:click|stopPropagation
       role="dialog"
       aria-modal="true"
       aria-label={$t('helpDialogAria')}
       tabindex="-1"
-      use:focusPanel
+      use:focusTrap
     >
       <header class="settings-head">
         <div class="head-left">
@@ -191,16 +188,15 @@
   {/if}
 
   {#if showSettings}
-  <div class="settings-backdrop" transition:fade={{ duration: 150 }} on:click={closeSettings}>
+  <div class="settings-backdrop" transition:fade={{ duration: 150 }} on:click|self={closeSettings}>
     <div
       class="settings-panel"
       transition:scale={{ duration: 180, start: 0.92 }}
-      on:click|stopPropagation
       role="dialog"
       aria-modal="true"
       aria-label={$t('settingsAria')}
       tabindex="-1"
-      use:focusPanel
+      use:focusTrap
     >
       <header class="settings-head">
         <div class="head-left">
@@ -557,8 +553,8 @@
   }
 
   .close-btn {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -617,8 +613,8 @@
   }
 
   .step-btn {
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -755,7 +751,7 @@
   .danger-confirm-btn {
     border: none;
     background: var(--colors-number-alert);
-    color: #fff;
+    color: var(--colors-on-alert);
     border-radius: 8px;
     padding: 7px 14px;
     font-family: 'Inter', sans-serif;

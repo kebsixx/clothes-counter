@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <title>Clothes Counter</title>
+  <!-- Tiny cut (16px): hinge closes at this size, so drop it and widen the aperture. -->
+  <path fill="#000000" d="M208.48 177.21 A88 88 0 1 1 208.48 78.79 L165.37 107.87 A36 36 0 1 0 165.37 148.13 Z"/>
+</svg>

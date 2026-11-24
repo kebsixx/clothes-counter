@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <title>Clothes Counter — concept B</title>
+  <!-- Deck: back card, then a front card split by the flip hinge -->
+  <rect x="40" y="30" width="176" height="150" rx="34" fill="#000000"/>
+  <path fill="#000000" d="M58 80 H198 A38 38 0 0 1 236 118 V150 H20 V118 A38 38 0 0 1 58 80 Z"/>
+  <path fill="#000000" d="M20 158 H236 V198 A38 38 0 0 1 198 236 H58 A38 38 0 0 1 20 198 Z"/>
+</svg>

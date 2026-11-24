@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <title>Clothes Counter</title>
+  <!-- Master: annulus R88/r40, aperture 30deg, hinge gap 14 at y=128, bbox centred. -->
+  <path fill="#000000" d="M46.03 121 A88 88 0 0 1 209.96 84 L168.39 108 A40 40 0 0 0 94.37 121 Z"/>
+  <path fill="#000000" d="M46.03 135 A88 88 0 0 0 209.96 172 L168.39 148 A40 40 0 0 1 94.37 135 Z"/>
+</svg>

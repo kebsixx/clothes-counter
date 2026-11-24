@@ -4,6 +4,7 @@
   import FlipDigit from './FlipDigit.svelte';
   import { sanitizeLabel } from '../stores/clothingStore.js';
   import { t } from '../stores/i18n.js';
+  import { focusTrap } from './focusTrap.js';
 
   export let label = '';
   export let fallback = '';
@@ -15,6 +16,7 @@
 
   let pressTimer;
   let showReset = false;
+  let suppressClick = false;
   let editing = false;
   let draft = '';
 
@@ -24,18 +26,26 @@
   $: over = count >= max;
 
   function handleClick() {
+    if (suppressClick) {
+      suppressClick = false;
+      return;
+    }
     onIncrement();
   }
 
   function handlePressStart() {
     showReset = false;
+    suppressClick = false;
     pressTimer = window.setTimeout(() => {
+      // The release of this same gesture must not count as a tap.
+      suppressClick = true;
       showReset = true;
     }, 600);
   }
 
   function handlePressEnd() {
     if (pressTimer) clearTimeout(pressTimer);
+    pressTimer = null;
   }
 
   function handleContextMenu(e) {
@@ -43,9 +53,20 @@
     showReset = true;
   }
 
+  function closeReset() {
+    showReset = false;
+  }
+
   function confirmReset() {
     onReset();
     showReset = false;
+  }
+
+  function onResetKeydown(e) {
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      closeReset();
+    }
   }
 
   function autofocus(node) {
@@ -94,7 +115,8 @@
 <div class="relative inline-block counter-wrap">
   <button
     class="flip-card group"
-    aria-live="polite"
+    type="button"
+    aria-label={$t('counterAria', { label, count })}
     on:click={handleClick}
     on:pointerdown={handlePressStart}
     on:pointerup={handlePressEnd}
@@ -102,11 +124,14 @@
     on:pointerleave={handlePressEnd}
     on:contextmenu={handleContextMenu}
   >
-    <div class="flip-row">
+    <div class="flip-row" aria-hidden="true">
       <FlipDigit value={tens} {over} />
       <FlipDigit value={units} {over} />
     </div>
   </button>
+  <span class="sr-only" role="status">
+    {$t('counterStatus', { label, count, max })}{over ? ` — ${$t('limitReached')}` : ''}
+  </span>
 
   {#if editing}
     <input
@@ -135,12 +160,22 @@
 </div>
 
 {#if showReset}
-  <div class="reset-dialog" transition:fade={{ duration: 150 }} role="dialog" aria-modal="true">
+  <div
+    class="reset-dialog"
+    transition:fade={{ duration: 150 }}
+    role="dialog"
+    aria-modal="true"
+    aria-label={$t('resetQuestion', { label })}
+    tabindex="-1"
+    use:focusTrap
+    on:click|self={closeReset}
+    on:keydown={onResetKeydown}
+  >
     <div class="reset-panel" transition:scale={{ duration: 160, start: 0.92 }}>
       <span class="reset-question">{$t('resetQuestion', { label })}</span>
       <div class="reset-actions">
         <button class="reset-btn confirm" on:click={confirmReset}>{$t('yes')}</button>
-        <button class="reset-btn cancel" on:click={() => (showReset = false)}>{$t('cancel')}</button>
+        <button class="reset-btn cancel" on:click={closeReset}>{$t('cancel')}</button>
       </div>
     </div>
   </div>
@@ -268,6 +303,10 @@
     z-index: 50;
   }
 
+  .reset-dialog:focus {
+    outline: none;
+  }
+
   .reset-panel {
     background: var(--colors-card-bg);
     border: 1px solid var(--colors-card-line);
@@ -311,7 +350,7 @@
 
   .confirm {
     background: var(--colors-number-alert);
-    color: #fff;
+    color: var(--colors-on-alert);
   }
 
   .confirm:hover {

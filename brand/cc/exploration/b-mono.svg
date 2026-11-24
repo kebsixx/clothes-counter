@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- Concept B (final): two bold strokes → CC feel, stroke-free master at end -->
+  <g stroke="#000000" stroke-width="14" stroke-linecap="square" fill="none">
+    <path d="M20 40 H50 C 58 40 64 46 64 52 c 0 6 -6 12 -16 12 H20"/>
+    <path d="M48 156 H26 C 18 156 12 162 12 168 c 0 6 6 12 18 12 h30"/>
+  </g>
+</svg>

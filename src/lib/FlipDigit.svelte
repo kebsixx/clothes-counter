@@ -161,4 +161,12 @@
     z-index: 3;
     pointer-events: none;
   }
+
+  /* Skip the flip: the card snaps to its final face, which still hides the
+     stale bottom half behind it. */
+  @media (prefers-reduced-motion: reduce) {
+    .card {
+      animation-duration: 0.01ms;
+    }
+  }
 </style>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- Concept A: Floating tile layers (also the cardset mood). Mono: good for instagram muted look. */ -->
+  <rect x="28" y="36" width="200" height="72" rx="10" fill="#1e1e1e"/>
+  <rect x="28" y="44" width="200" height="64" rx="8" fill="#e0e0e0"/>
+  <rect x="44" y="140" width="168" height="72" rx="10" fill="#ff3333"/>
+  <rect x="42" y="136" width="172" height="76" rx="9" fill="#141414"/>
+</svg>

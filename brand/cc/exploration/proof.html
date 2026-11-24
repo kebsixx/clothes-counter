@@ -1,0 +1,28 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  body { margin: 0; font: 12px/1.4 system-ui, sans-serif; color: #111; background: #f6f5f2; }
+  .row { display: flex; align-items: flex-end; gap: 30px; padding: 22px 28px; }
+  .dark { background: #121212; color: #eee; }
+  .cell { text-align: center; }
+  .cell img { display: block; margin: 0 auto 6px; }
+  .label { opacity: .55; font-size: 11px; }
+  .h { padding: 12px 28px 0; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 10px; opacity: .5; }
+</style>
+<div class="h">cut decision — master 64 / tiny 64 / tiny 48 / master 48 / tiny 32 / tiny 16</div>
+<div class="row">
+  <div class="cell"><img src="cc-mark-64.png" width="64"><div class="label">master 64</div></div>
+  <div class="cell"><img src="cc-mark-tiny-64.png" width="64"><div class="label">tiny 64</div></div>
+  <div class="cell"><img src="cc-mark-tiny-48.png" width="48"><div class="label">tiny 48</div></div>
+  <div class="cell"><img src="cc-mark-48.png" width="48" onerror="this.style.visibility='hidden'"><div class="label">master 48</div></div>
+  <div class="cell"><img src="cc-mark-tiny-32.png" width="32"><div class="label">tiny 32</div></div>
+  <div class="cell"><img src="cc-mark-tiny-16.png" width="16"><div class="label">tiny 16</div></div>
+</div>
+<div class="dark">
+  <div class="h">dark — white 512 / white 64 / red 128</div>
+  <div class="row">
+    <div class="cell"><img src="cc-mark-white-512.png" width="150"><div class="label">white 512</div></div>
+    <div class="cell"><img src="cc-mark-white-64.png" width="64"><div class="label">white 64</div></div>
+    <div class="cell"><img src="cc-mark-red-128.png" width="128"><div class="label">red 128</div></div>
+  </div>
+</div>
