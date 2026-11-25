@@ -150,7 +150,7 @@
 
   <main
     class="main"
-    {...useSwipe(onSwipeMain, () => ({ timeframe: 500, minSwipeDistance: 48, touchAction: 'pan-y' }))}
+    {...useSwipe(onSwipeMain, () => ({ timeframe: 3000, minSwipeDistance: 48, touchAction: 'pan-y' }))}
   >
     {#if $activeOutfit}
       {#key $activeOutfitId}
