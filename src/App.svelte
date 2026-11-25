@@ -1,6 +1,7 @@
 <script>
   import { Settings, HelpCircle, X, Moon, Sun, Minus, Plus, Trash2, TriangleAlert } from 'lucide-svelte';
   import { fade, scale } from 'svelte/transition';
+  import { cubicOut } from 'svelte/easing';
   import { useSwipe } from 'svelte-gestures';
   import Counter from './lib/Counter.svelte';
   import OutfitTabs from './lib/OutfitTabs.svelte';
@@ -34,13 +35,32 @@
   let showHelp = false;
   let confirmResetOpen = false;
 
-  // Counter: fade tebal tunggal (in = out, crossfade lebih terasa).
-  // Tab: slide via pill indicator di OutfitTabs.
   $: reduceMotion =
     typeof window !== 'undefined' &&
     typeof window.matchMedia === 'function' &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  $: gridFade = { duration: reduceMotion ? 0 : 300 };
+  // +1 = incoming outfit comes from the right, -1 = from the left.
+  let navDir = 1;
+
+  const SLIDE = 100;
+
+  // Whole sheets slide, opaque, edge to edge — like a carousel paging under
+  // the finger. Cross-fading two sheets is what read as "patah" mid-move.
+  function slideIn() {
+    return {
+      duration: reduceMotion ? 0 : 280,
+      easing: cubicOut,
+      css: (t) => `transform: translateX(${(1 - t) * SLIDE * navDir}%)`,
+    };
+  }
+
+  function slideOut() {
+    return {
+      duration: reduceMotion ? 0 : 280,
+      easing: cubicOut,
+      css: (t) => `transform: translateX(${-(1 - t) * SLIDE * navDir}%)`,
+    };
+  }
 
   function toggleTheme(mode) {
     themeMode.set(mode);
@@ -69,15 +89,27 @@
 
   // Swipe kanan-kiri di mobile untuk ganti tab via svelte-gestures.
   // touchAction 'pan-y' menjaga scroll vertikal tetap native.
+  function activeIndex() {
+    return $outfits.findIndex((o) => o.id === $activeOutfitId);
+  }
+
+  // Arah transisi selalu mengikuti arah tujuan, bukan arah jari, supaya
+  // tap tab dan swipe memberi gerak yang sama.
+  function goTo(id) {
+    const from = activeIndex();
+    const to = $outfits.findIndex((o) => o.id === id);
+    if (from !== -1 && to !== -1 && to !== from) navDir = to > from ? 1 : -1;
+    setActiveOutfit(id);
+  }
+
   function onSwipeMain(event) {
-    if (event.detail.pointerType !== 'touch') return;
     const dir = event.detail.direction;
     if (dir !== 'left' && dir !== 'right') return;
-    const idx = $outfits.findIndex((o) => o.id === $activeOutfitId);
+    const idx = activeIndex();
     if (idx === -1) return;
     const next = dir === 'left' ? idx + 1 : idx - 1;
-    if (next < 0 || next >= $outfits.length) return;
-    setActiveOutfit($outfits[next].id);
+    if (!$outfits[next]) return;
+    goTo($outfits[next].id);
   }
 </script>
 
@@ -87,7 +119,7 @@
   <OutfitTabs
     outfits={$outfits}
     activeId={$activeOutfitId}
-    onSelect={setActiveOutfit}
+    onSelect={goTo}
     onAdd={addOutfit}
     onDelete={removeOutfit}
     onRename={renameOutfit}
@@ -118,12 +150,12 @@
 
   <main
     class="main"
-    {...useSwipe(onSwipeMain, () => ({ timeframe: 300, minSwipeDistance: 60, touchAction: 'pan-y' }))}
+    {...useSwipe(onSwipeMain, () => ({ timeframe: 500, minSwipeDistance: 48, touchAction: 'pan-y' }))}
   >
-      {#if $activeOutfit}
-        {#key $activeOutfitId}
-          <div class="grid-viewport">
-          <div class="grid" transition:fade={gridFade}>
+    {#if $activeOutfit}
+      {#key $activeOutfitId}
+        <div class="grid-viewport">
+          <div class="grid" in:slideIn|local out:slideOut>
             <Counter
               label={$activeOutfit.counters.baju.label}
               fallback="Shirt"
@@ -143,9 +175,9 @@
               onRename={(name) => setLabel('celana', name)}
             />
           </div>
-          </div>
-        {/key}
-      {/if}
+        </div>
+      {/key}
+    {/if}
   </main>
 
   {#if showHelp}
@@ -438,18 +470,30 @@
 
   .main {
     flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    place-items: center;
     padding: 24px 16px calc(104px + env(safe-area-inset-bottom));
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .main :global(input),
+  .main :global(textarea) {
+    user-select: text;
+    -webkit-user-select: text;
   }
 
   .grid-viewport {
+    grid-area: 1 / 1;
     display: grid;
     width: 100%;
     max-width: 640px;
     margin: 0 auto;
     overflow: clip;
+    background: var(--colors-page-bg);
   }
 
   .grid {
@@ -459,7 +503,7 @@
     grid-template-columns: 1fr;
     place-items: center;
     width: 100%;
-    will-change: transform, opacity;
+    will-change: transform;
   }
 
   @media (prefers-reduced-motion: reduce) {
